@@ -1,0 +1,114 @@
+.\"
+.\"	HTML Tree
+.\"	Content_Node.3
+.\"
+.\"	Copyright (C) 1999  Paul J. Lucas
+.\"
+.\"	This program is free software; you can redistribute it and/or modify
+.\"	it under the terms of the GNU General Public License as published by
+.\"	the Free Software Foundation; either version 2 of the License, or
+.\"	(at your option) any later version.
+.\" 
+.\"	This program is distributed in the hope that it will be useful,
+.\"	but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"	GNU General Public License for more details.
+.\" 
+.\"	You should have received a copy of the GNU General Public License
+.\"	along with this program; if not, write to the Free Software
+.\"	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.\" ---------------------------------------------------------------------------
+.\" define code-start macro
+.de cS
+.sp
+.nf
+.RS 5
+.ft CW
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i 4i 4.5i 5i 5.5i
+..
+.\" define code-end macro
+.de cE
+.ft 1
+.RE
+.fi
+.sp
+..
+.\" ---------------------------------------------------------------------------
+.tr ^
+.TH \f3Content_Node\f1 3 "March 19, 2000" "HTML Tree"
+.SH NAME
+\f(CWContent_Node\fP \- Node in an HTML tree for HTML elements
+that possibly have attributes and child nodes, i.e., content.
+.SH SYNOPSIS
+.ft CW
+.nf
+class Content_Node : public Element_Node, public Parent_Node {
+public:
+	Content_Node( char const *name, element const&, Parent_Node* = 0 );
+	Content_Node(
+		char const *name, element const&,
+		char const *att_begin, char const *att_end,
+		Parent_Node* = 0
+	);
+	virtual ~Content_Node();
+
+	// overridden
+	virtual void	visit( visitor const&, int depth = 0 );
+
+	// inherited
+	attribute_map	attributes;
+	void			add_child( HTML_Node *child );
+	child_list&	children();
+	child_list const&	children() const;
+	bool			empty() const;
+	bool			remove_child( HTML_Node *child );
+	char^^^const*	name() const;
+	Content_Node*	parent() const;
+	void			parent( Content_Node *new_parent );
+};
+.fi
+.ft 1
+.SH DESCRIPTION
+\f(CWContent_Node\fP is-an \f(CWElement_Node\fP and an \f(CWParent_Node\fP
+that contains attributes and child nodes, i.e., content.
+For example, the \f(CWSELECT\f1 element below
+is a parent of the newline \f(CWText_Node\fP after the \f(CWSELECT\fP
+and all of the \f(CWOPTION\f1 elements:
+.cS
+<SELECT NAME="menu">		\f2parent child\fP
+	<OPTION>Blueberry		\f2child grandchild\fP
+	<OPTION>Chocolate		\f2child grandchild\fP
+	<OPTION>Raspberry		\f2child grandchild\fP
+</SELECT>
+.cE
+whereas an element such as \f(CWIMG\f1 can have no child nodes.
+.SS "Public Interface"
+.IP "\f3Constructors\f1"
+These are the same as those for \f(CWElement_Node\f1.
+.IP "\f3Destructor\f1"
+There is nothing noteworthy about it.
+.IP "\f(CWvirtual void visit( visitor const &v, int depth = 0 )\fP"
+This member function overrides \f(CWvisit()\f1.
+First, it visits this node passing \f(CWfalse\f1 for \f(CWis_end_tag\f1.
+If the visitor's \f(CWoperator()\f1 returns \f(CWfalse\f1, return immediately.
+Otherwise, call \f(CWParent_Node::visit()\f1
+that visits each child node in order passing \f(CWdepth + 1\f1,
+then visit this node again passing \f(CWtrue\f1 for \f(CWis_end_tag\f1.
+If the visitor's \f(CWoperator()\f1 returns \f(CWfalse\f1, return immediately.
+Otherwise repeat the entire visit cycle.
+In pseudo-code:
+.cS
+	do {
+		if ( !v( this, depth, false ) )
+			break;
+		Parent_Node::visit( v, depth + 1 );
+	} while ( v( this, depth, true ) );
+.cE
+.SH SEE ALSO
+.BR Element_Node (3),
+.BR HTML_Node (3),
+.BR Parent_Node (3).
+.SH AUTHOR
+Paul J. Lucas
+.RI < pjl@best.com >

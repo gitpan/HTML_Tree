@@ -1,0 +1,12 @@
+Changes
+MANIFEST
+Makefile.PL
+Tree.pm
+Tree.xs
+blessed.h
+hash4perl.h
+perl_visitor.c
+perl_visitor.h
+root_node.h
+test.pl
+typemap

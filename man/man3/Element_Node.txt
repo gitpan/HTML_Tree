@@ -1,0 +1,132 @@
+
+
+
+Element_Node(3)					  Element_Node(3)
+
+
+NAME
+       Element_Node - Node in an HTML tree for HTML elements
+
+SYNOPSIS
+       class element;
+
+       class Element_Node : public virtual HTML_Node {
+       public:
+	    typedef std::map< std::string, std::string > attribute_map;
+
+	    Element_Node(
+		 char const *name, element const&, Parent_Node* = 0
+	    );
+	    Element_Node(
+		 char const *name, element const &elt,
+		 char const *att_begin, char const *att_end,
+		 Parent_Node* = 0
+	    );
+	    virtual ~Element_Node();
+
+	    attribute_map  attributes;
+
+	    char   const*  name() const;
+
+	    // inherited
+	    Parent_Node*   parent() const;
+	    void	   parent( Parent_Node *new_parent );
+	    virtual void   visit( visitor const&, int depth = 0 );
+       };
+
+DESCRIPTION
+       Element_Node is-an HTML_Node for HTML element, e.g.: HEAD,
+       TITLE, IMG, SELECT, etc.
+
+   Public Interface
+       Constructors
+	      Construct an Element_Node.  The arguments are:
+
+		 name	   The name of the HTML element.  It must
+			   be specified in lower case.
+
+		 att_begin, att_end
+			   Pointers  to	 the  beginning character
+			   and one past the end (in STL	 iterator
+			   style)  whence to parse the attributes
+			   from, e.g.:
+
+			   <IMG SRC="foo.gif" HEIGHT=30 WIDTH=200>
+			       |				 |
+			       begin				 end
+
+
+		 elt	   A reference to the element  that  this
+			   node is being made for.
+
+
+
+HTML Tree		  March 19, 2000			1
+
+
+
+
+
+Element_Node(3)					  Element_Node(3)
+
+
+		 parent	   The	parent	node  to make this node a
+			   child of, if any.
+
+       Destructor
+	      There is nothing noteworthy about it.
+
+       attribute_map attributes
+	      Contains key/value pairs	of  attribute  names  and
+	      their  values.   Attribute  names are in lower case
+	      (regardless of how they  are  in	the  HTML  file).
+	      Boolean  attributes  have their name as their value
+	      (per the HTML 4.0 specification).
+
+       char const* name() const
+	      Returns the name of the HTML element, e.g.,  title.
+	      Names are returned in lower case (regardless of how
+	      they are in the HTML file).
+
+SEE ALSO
+       HTML_Node(3), Parent_Node(3).
+
+       Dave Raggett, Arnaud Le Hors, and Ian Jacobs.   ``On  SGML
+       and HTML: SGML constructs used in HTML: Attributes,'' HTML
+       4.0 Specification, section 3.2.2, World Wide  Web  Consor-
+       tium, April 1998.
+	      http://www.w3.org/TR/PR-html40/intro/sgml-
+	      tut.html#h-3.2.2
+
+AUTHOR
+       Paul J. Lucas <pjl@best.com>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HTML Tree		  March 19, 2000			2
+
+

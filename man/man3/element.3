@@ -1,0 +1,78 @@
+.\"
+.\"	HTML Tree
+.\"	element.3
+.\"
+.\"	Copyright (C) 1999  Paul J. Lucas
+.\"
+.\"	This program is free software; you can redistribute it and/or modify
+.\"	it under the terms of the GNU General Public License as published by
+.\"	the Free Software Foundation; either version 2 of the License, or
+.\"	(at your option) any later version.
+.\" 
+.\"	This program is distributed in the hope that it will be useful,
+.\"	but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"	GNU General Public License for more details.
+.\" 
+.\"	You should have received a copy of the GNU General Public License
+.\"	along with this program; if not, write to the Free Software
+.\"	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.\" ---------------------------------------------------------------------------
+.\" define code-start macro
+.de cS
+.sp
+.nf
+.RS 5
+.ft CW
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i 4i 4.5i 5i 5.5i
+..
+.\" define code-end macro
+.de cE
+.ft 1
+.RE
+.fi
+.sp
+..
+.\" ---------------------------------------------------------------------------
+.tr ^
+.TH \f3element\f1 3 "October 12, 1999" "HTML Tree"
+.SH NAME
+\f(CWelement\fP \- Information about an HTML element
+needed for parsing HTML files
+.SH SYNOPSIS
+.ft CW
+.nf
+class element {
+public:
+	enum end_tag_value { forbidden, optional, required };
+
+	end_tag_value^^const	end_tag;
+	std::set< char const* >	close_tags;
+};
+.fi
+.ft 1
+.SH DESCRIPTION
+An \f(CWelement\fP is a class for containing information about an HTML element
+needed for parsing HTML files.
+.SS "Public Interface"
+.IP "\f(CWend_tag_value end_tag\fP"
+Specifies whether this element's end tag is forbidden, optional, or required.
+.IP "\f(CWstd::set< char const* > close_tags\fP"
+For elements whose end tags are not forbidden,
+this is a set of pointers to C-style (null terminated) strings
+for all elements that either explicitly or implicity end this element.
+For example,
+the \f(CWH1\f1 element is ended only by the \f(CW</H1>\f1 tag,
+but the \f(CWLI\f1 element is ended by any one of the
+\f(CW<LI>\f1,
+\f(CW</LI>\f1,
+\f(CW</OL>\f1,
+or
+\f(CW</UL>\f1
+tags.
+.SH SEE ALSO
+.BR Element_Node (3).
+.SH AUTHOR
+Paul J. Lucas
+.RI < pjl@best.com >

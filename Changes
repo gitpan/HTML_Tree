@@ -1,0 +1,485 @@
+HTML Tree Changes
+=================
+
+*******************************************************************************
+1.2.3
+*******************************************************************************
+
+BUG FIXES
+---------
+
+* When setting an HTML attribute's value to a variable whose value was undef,
+  the attribute was not deleted.
+
+  (This bug fix shall be known as bug fix AVU.)
+
+
+CHANGES, file-by-file
+---------------------
+
+* mod/HTML/Tree/Tree.xs
+
+	1. In att(), performed the following substitution:
+
+		s/new_value == &PL_sv_undef/!SvOK( new_value )/
+
+	   for bug fix AVU.
+
+* version.h
+
+	1. Updated version to "1.2.3".
+
+
+*******************************************************************************
+1.2.2
+*******************************************************************************
+
+BUG FIXES
+---------
+
+* Fixed segmentation fault when parsing HTML files that contain tags longer
+  than Tag_Name_Max_Size characters.
+
+  (This bug fix shall be known as bug fix HTL.)
+
+
+CHANGES, file-by-file
+---------------------
+
+* html.c
+
+	1. In parse_html_tag(), added tag buffer overflow check for bug
+	   fix HTL.
+
+* version.h
+
+	1. Updated version to "1.2.2".
+
+
+*******************************************************************************
+1.2.1
+*******************************************************************************
+
+BUG FIXES
+---------
+
+* Fixed a couple of bugs in mod/HTML/Tree/test.pl (see below).
+
+
+CHANGES, file-by-file
+---------------------
+
+* mod/HTML/Tree/test.pl
+
+	1. Simplified fetchrow() function and also eliminated dummy '0'
+	   in data.
+
+	2. Fixed path to test.html.
+
+	3. Added "$out =~ s/^\s*\n//gm;" just before comparison to
+	   accomodate differences in whitespace.
+
+* version.h
+
+	1. Changed version number to "1.2.1".
+
+
+*******************************************************************************
+1.2
+*******************************************************************************
+
+NEW FEATURES
+------------
+
+* Added a built-in function to substitute the HREF attribute as a shorthand.
+
+  (This feature shall be known as feature SUBHREF.)
+
+* Added a built-in function to substitute just the numeric ID part of an
+  attribute's value.
+
+  (This feature shall be known as feature SUBID.)
+
+* I've decided that "sub::" makes more sense that "att::"
+
+  (This change shall be known as change ATT2.)
+
+* Changed the behavior when a CLASS attribute has multiple values for end tags
+  in that only the first value's function is called.
+
+  (This feature shall be known as feature CMVE.)
+
+
+BUG FIXES
+---------
+
+* <DD> elements weren't implicitly terminated by a new <DT> element.
+
+  (This bug fix shall be known as bug fix DDDT.)
+
+* The "prettyhtml" test target didn't have its dependencies correctly in the
+  GNUmakefile due to an error in the "include" directive.
+
+  (This bug fix shall be known as bug fix IDT.)
+
+
+CHANGES, file-by-file
+---------------------
+
+* elements.c
+
+	1. Added:
+
+		"dt", "/dt",
+
+	   to the "dd" line for bug fix DDDT.
+
+* GNUmakefile
+
+	1. Performed following substitution:
+
+		s/$(TEST:/$(TEST_SRCS:/
+
+	   for bug fix IDT.
+
+* mod/Apache/HTML/ClassParser/ClassParser.pm
+
+	1. Performed following substitution:
+
+		s/$VERSION = '1.0'/$VERSION = '1.2'/
+
+	2. In sub_att(), performed following substitution:
+
+		s/att::/sub::/
+
+	   for change ATT2.
+
+	3. Added sub_href function for feature SUBHREF and added to the
+	   documentation for it.
+
+	4. Added sub_att_id, sub_href_id, and sub_value_id functions
+	   for feature SUBID and added to the documentation for it.
+
+	5. In visitor(), changed it so that if the tag is an end tag,
+	   return after calling the first CLASS value function (for
+	   feature CMVE).
+
+	6. Added description of for CLASS attributes that have multiple
+	   values to the documentation.
+
+	7. Added documention for the heretofore undocumented pm_uri feature.
+
+	8. Fixed some grammar and spelling errors in the documentation.
+
+* version.h
+
+	1. Changed version number to "1.2".
+
+
+*******************************************************************************
+1.1.1
+*******************************************************************************
+
+BUG FIXES
+---------
+
+* "att::" was completely broken because it didn't do the right pattern match.
+  I don't know how this ever worked.
+
+  (This bug fix shall be known as bug fix ATT.)
+
+
+CHANGES, file-by-file
+---------------------
+
+* mod/Apache/HTML/ClassParser/ClassParser.pm
+
+	1. Simplifed append_att().
+
+	2. In sub_att(), performed following substitution:
+
+		s/sub::/att::/
+
+	   for bug fix ATT.
+
+* version.h
+
+	1. Changed version number to "1.1.1".
+
+
+*******************************************************************************
+1.1
+*******************************************************************************
+
+CHANGES, file-by-file
+---------------------
+
+* config/config.mk
+
+	1. Removed CCCEXT, et al.
+
+	2. Moved manual page stuff to man.mk.
+
+* config/man.mk
+
+	1. Copied improved version from SWISH++ source tree.
+
+* file_vector.h
+
+	1. Replaced off_t with size_t due to size differences when
+	   compiled under Perl 5.6 supporting large files.
+
+* man/GNUakefile
+* man/Makefile
+
+	1. Renamed Makefile to GNUmakefile.
+
+	2. Updated to use auto dependency generation.
+
+* man/man3/GNUmakefile
+
+	1. Added this missing file.
+
+* mod/Apache/HTML/ClassParser/ClassParser.pm
+
+	1. Changed pattern to look for a package such that it is found
+	   only if the word package is precedded by zero or more
+	   whitespace characters.
+
+	2. For visitor(), added the missing comment for the RETURN
+	   VALUE.
+
+	3. In visitor(), made it so that "exists" is used with
+	   function_map so new keys are not created.
+
+	4. Minor tweaks, typo corrections, etc, in manual page.
+
+* mod/HTML/Tree/Makefile.PL
+
+	1. Performed following substitutions:
+
+		s/-DHAS_BOOL/-Ubool/
+
+	   to get rid of incorrect bool definition Perl introduces.
+
+* mod/HTML/Tree/Tree.xs
+
+	1. Simplified "if" statement in children().
+
+	2. Performed following substitutions:
+
+		s/na/PL_na/
+		s/sv_undef/PL_sv_undef/
+
+	   and added #ifndef checks since Perl 5.6.0 and later no
+	   longer supports the "polluted" names.
+
+* prettyhtml.c
+
+	1. Added #include <unistd.h> for getopt(3).
+
+* version.h
+
+	1. Changed verson to "1.1".
+
+
+*******************************************************************************
+1.0.2
+*******************************************************************************
+
+BUG FIXES
+---------
+
+* Fixed a problem with parsing files that began with <! ... >, e.g., a
+  document type specification.
+
+  (This bug fix shall be known as bug fix LTB.)
+
+CHANGES, file-by-file
+---------------------
+
+* Content_Node.c
+
+	1. In constructor, performed following substitution:
+
+		s/Content_Node/Parent_Node/
+
+	   for bug fix LTB.
+
+	2. In constructor, added call to HTML_Node's constructor now
+	   that it is a virtual base class.
+
+	3. Moved code inside destructor to Parent_Node.c for bug fix
+	   LTB.
+
+	4. Moved code for add_child() and remove_child() to
+	   Parent_Node.c for bug fix LTB.
+
+	5. In visit(), called Parent_Node::visit() for bug fix LTB.
+
+* Content_Node.h
+
+	1. Added derivation from Parent_Node for bug fix LTB.
+
+	2. Moved all child data to Parent_Node.c for bug fix LTB.
+
+* Element_Node.c
+
+	1. In constructor, performed following substitution:
+
+		s/Content_Node/Parent_Node/
+
+	   for bug fix LTB.
+
+* Element_Node.h
+
+	1. Changed derivation from HTML_Node to virtual for bug fix
+	   LTB.
+
+	2. Same as Element_Node.c item #1.
+
+	3. Changed return type of parse_html_tag() to void for bug fix
+	   LTB.
+
+* html.c
+
+	1. Added #include "Parent_Node.h" for bug fix LTB.
+
+	2. Changed type of cur_node to HTML_Node for bug fix LTB.
+
+	3. Integrated code for is_html_comment() and skip_html_comment().
+
+	4. Changed return type of parse_html_file() to Parent_Node* for
+	   bug fix LTB.
+
+	5. In parse_html_file(), got rid of union for bug fix LTB.
+
+	6. In parse_html_file(), created explicit root_node of type
+	   Parent_Node for bug fix LTB.
+
+	7. In parse_html_file(), added code to check for <! ... > and
+	   treat them as comments for bug fix LTB.
+
+	8. In parse_html_file(), got rid of creation of HTML element
+	   node for bug fix LTB.
+
+	9. Changed return type of parse_html_tag() to void for bug fix
+	   LTB.
+
+* html.h
+
+	1. Removed declarations of everything but parse_attributes()
+	   and parse_html_file().
+
+* HTML_Node.c
+* HTML_Node.h
+
+	1. In constructor, performed following substitution:
+
+		s/Content_Node/Parent_Node/
+
+	   for bug fix LTB.
+
+* Parent_Node.c
+* Parent_Node.h
+
+	1. Added these files for bug fix LTB.
+
+* prettyhtml.c
+
+	1. In main(), changed type of root_node to Parent_Node* for bug
+	   fix LTB.
+
+* Text_Node.c
+
+	1. In constructor, performed following substitution:
+
+		s/Content_Node/Parent_Node/
+
+	   for bug fix LTB.
+
+* Text_Node.h
+
+	1. Same as Text_Node.c item #1.
+
+	2. Changed derivation from HTML_Node to virtual for bug fix
+	   LTB.
+
+* version.h
+
+	1. Changed verson to "1.0.2".
+
+
+*******************************************************************************
+1.0.1
+*******************************************************************************
+
+BUG FIXES
+---------
+
+* Fixed a segmentation fault if you parsed the same file twice.
+
+  (This bug fix shall be known as bug fix SF2.)
+
+
+CHANGES, file-by-file
+---------------------
+
+* Content_Node.c
+
+	1. Made add_child() do nothing if the child's existing parent
+	   equals "this".
+
+	2. Made add_child() explicitly set the child's parent to
+	   "this".
+
+* elements.c
+
+	1. In instance(), added "const" to declaration of "m".
+
+* file_vector.h
+
+	1. In end(), performed following substitution:
+
+		s/size()/size_/
+
+	   so g++ can inline the functions.
+
+* html.c
+
+	1. In parse_html_tag(), moved declaration of cur_node to file
+	   scope for bug fix SF2.
+
+	2. In parse_html_file(), initialized cur_node to null for bug
+	   fix SF2.
+
+	3. In parse_html_file(), removed register storage class from
+	   declaration of 'c' since its address is taken.
+
+* HTML_Node.c
+
+	1. In constructor, initialze parent_ to null regardless of the
+	   argument and let the call to add_child() set it.
+
+	2. In parent(), do not assign to parent_ and instead let the
+	   call to add_child() set it.
+
+* man/man3/Content_Node.3
+
+	1. Updated description of add_child() to match Content_Node.c
+	   changes.
+
+* my_set.h
+
+	1. Removed unneccessary declaration of base_type.
+
+* version.h
+
+	1. Changed verson to "1.0.1".
+
+
+*******************************************************************************
+1.0
+*******************************************************************************
+
+* Initial release.

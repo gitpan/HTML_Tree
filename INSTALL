@@ -1,0 +1,74 @@
+===============================================================================
+Prerequisites for building HTML Tree for Unix
+===============================================================================
+
+HTML Tree has the following software as prerequisites:
+
+1. A C++ compiler.  HTML Tree has been built using g++ 2.95 (earlier versions
+   are untested).
+
+2. A version of STL, the ANSI/ISO C++ Standard Template Library.  If you are
+   using g++ or egcs, then you also need (the matching version of) libstd++.
+
+   If you are not using g++, then you need to have a port of STL that works
+   with your compiler.  Ports for various platforms are available from
+   ObjectSpace, Inc. having a web page at:
+
+	http://www.objectspace.com/
+
+   For more about STL in general, see:
+
+	http://www.cs.rpi.edu/~musser/stl.html
+	http://www.sgi.com/Technology/STL/
+
+3. Perl 5 (or later), but only if you intend on using the Perl language binding.
+
+All GNU software is freely available from:
+
+	ftp://prep.ai.mit.edu/pub/gnu/
+
+as well as many other mirror sites.
+
+
+===============================================================================
+Building HTML Tree for Unix
+===============================================================================
+
+1. Go to the "config" directory and edit the "config.mk" file as necessary.
+   This file controls how the software is compiled.
+
+2. Go back to the top-level directory and type "make".  If everything works
+   out, the software will be built.  If you're root, you can also type "make
+   install".
+
+3. Optional: if you want to build the Perl language binding, type:
+
+	cd mod/HTML
+	perl Makefile.PL
+	make
+	make test		# optional
+	make install
+
+4. Optional: if you want to build the Apache mod_perl module, type:
+
+	cd mod/Apache
+	perl Makefile.PL
+	make
+	make test		# optional
+	make install
+
+
+===============================================================================
+Notes
+===============================================================================
+
+1. Don't complain to me or bother asking me for help if you get either "No such
+   file or directory" for or errors in the standard C++ headers.  It means that
+   your C++ compiler and/or libraries are improperly installed.  I know nothing
+   about your OS or how your system is (mis)configured.  Complain to your
+   sysadmin: the person who botched the installation and whose job it is to fix
+   it.
+
+2. Don't bother asking me for precompiled binaries for a particular OS -- I
+   don't have them.  I only have Solaris on my desk and if I can compile it for
+   Solaris, so can you.

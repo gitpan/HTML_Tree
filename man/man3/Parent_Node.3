@@ -1,0 +1,128 @@
+.\"
+.\"	HTML Tree
+.\"	Parent_Node.3
+.\"
+.\"	Copyright (C) 1999  Paul J. Lucas
+.\"
+.\"	This program is free software; you can redistribute it and/or modify
+.\"	it under the terms of the GNU General Public License as published by
+.\"	the Free Software Foundation; either version 2 of the License, or
+.\"	(at your option) any later version.
+.\" 
+.\"	This program is distributed in the hope that it will be useful,
+.\"	but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"	GNU General Public License for more details.
+.\" 
+.\"	You should have received a copy of the GNU General Public License
+.\"	along with this program; if not, write to the Free Software
+.\"	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.\" ---------------------------------------------------------------------------
+.\" define code-start macro
+.de cS
+.sp
+.nf
+.RS 5
+.ft CW
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i 4i 4.5i 5i 5.5i
+..
+.\" define code-end macro
+.de cE
+.ft 1
+.RE
+.fi
+.sp
+..
+.\" ---------------------------------------------------------------------------
+.tr ^
+.TH \f3Parent_Node\f1 3 "March 2, 2000" "HTML Tree"
+.SH NAME
+\f(CWParent_Node\fP \- Node in an HTML tree for HTML elements
+that contains child nodes
+.SH SYNOPSIS
+.ft CW
+.nf
+class Parent_Node : public virtual HTML_Node {
+public:
+	typedef std::list< HTML_Node* > child_list;
+
+	Parent_Node( Parent_Node *parent = 0 );
+	virtual ~Parent_Node();
+
+	void			add_child( HTML_Node *child );
+	child_list^&	children();
+	child_list const&	children() const;
+	bool			empty() const;
+	bool			remove_child( HTML_Node *child );
+
+	// overridden
+	virtual void	visit( visitor const&, int depth = 0 );
+
+	// inherited
+	Parent_Node*	parent() const;
+	void			parent( Parent_Node *new_parent );
+};
+.fi
+.ft 1
+.SH DESCRIPTION
+\f(CWParent_Node\fP is-an \f(CWHTML_Node\fP
+that contains child nodes, i.e., content.
+For example, the \f(CWSELECT\f1 element below
+is a parent of the newline \f(CWText_Node\fP after the \f(CWSELECT\fP
+and all of the \f(CWOPTION\f1 elements:
+.cS
+<SELECT NAME="menu">		\f2parent child\fP
+	<OPTION>Blueberry		\f2child grandchild\fP
+	<OPTION>Chocolate		\f2child grandchild\fP
+	<OPTION>Raspberry		\f2child grandchild\fP
+</SELECT>
+.cE
+whereas an element such as \f(CWIMG\f1 can have no child nodes.
+.SS "Public Interface"
+.IP "\f3Constructors\f1"
+These are the same as those for \f(CWElement_Node\f1.
+.IP "\f3Destructor\f1"
+In addition to destroying itself,
+the destructor also destroys all of its child nodes, if any.
+.IP "\f(CWvoid add_child( HTML_Node *child )\fP"
+If \f(CWchild\f1 is null
+or it equals \f(CWthis\f1, does nothing.
+Otherwise,
+if the child node already has a parent,
+it is removed from that parent's list of child nodes first;
+then it is added to this node's list of child nodes
+and sets the child's parent to \f(CWthis\f1.
+.IP "\f(CWchild_list& children()\fP"
+.IP "\f(CWchild_list const& children() const\fP"
+Returns a reference to this node's list of child nodes,
+or a reference to an empty list if there are none.
+.IP "\f(CWbool empty() const\fP"
+Returns true only if this node has no child nodes.
+.IP "\f(CWbool remove_child( HTML_Node *child )\fP"
+If \f(CWchild\f1 is null, does nothing and returns \f(CWfalse\f1.
+Otherwise,
+searches through this node's list of child nodes
+looking for the child.
+If found,
+removes the child, set the child's parent to null, and returns \f(CWtrue\f1;
+otherwise, returns \f(CWfalse\f1.
+.IP "\f(CWvirtual void visit( visitor const &v, int depth = 0 )\fP"
+This member function overrides \f(CWHTML_Node\f1's \f(CWvisit()\f1.
+It simply calls \f(CWvisit()\f1 for each child node in order
+passing \f(CWdepth\f1.
+In pseudo-code:
+.cS
+	for ( \f2every child\fP )
+		\f2child\fP->visit( v, depth );
+.cE
+It does
+.I not
+call \f(CWvisit()\f1 for itself.
+It is therefore effectively ``invisible'' in the HTML node tree.
+.SH SEE ALSO
+.BR Element_Node (3),
+.BR HTML_Node (3).
+.SH AUTHOR
+Paul J. Lucas
+.RI < pjl@best.com >

@@ -1,0 +1,18 @@
+	HTML Tree
+	C++ library for parsing and HTML file into a DOM-like tree
+	________________________________________________________________
+
+	HTML Tree is a C++ library for parsing an HTML file into a
+	DOM-like (Document Object Model) tree.  Once created, nodes in
+	the tree (HTML elements and text) can be modified.  The modified
+	tree can then be output.  This allows an HTML file to be used as
+	a template for the generation of dynamic web pages.
+
+	Additionally, there is also a Perl extension (XS layer) and an
+	Apache mod_perl module.
+
+	________________________________________________________________
+
+	Copyright (C) 1999 by Paul J. Lucas <pjl@best.com>
+	HTML Tree is available under the GNU General Public License.
+	This file last updated: October 17, 1999

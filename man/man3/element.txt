@@ -1,0 +1,66 @@
+
+
+
+element(3)					       element(3)
+
+
+NAME
+       element	-  Information	about  an HTML element needed for
+       parsing HTML files
+
+SYNOPSIS
+       class element {
+       public:
+	    enum end_tag_value { forbidden, optional, required };
+
+	    end_tag_value  const     end_tag;
+	    std::set< char const* >  close_tags;
+       };
+
+DESCRIPTION
+       An element is a class for containing information about  an
+       HTML element needed for parsing HTML files.
+
+   Public Interface
+       end_tag_value end_tag
+	      Specifies whether this element's end tag is forbid-
+	      den, optional, or required.
+
+       std::set< char const* > close_tags
+	      For elements whose end tags are not forbidden, this
+	      is  a  set of pointers to C-style (null terminated)
+	      strings for all elements that either explicitly  or
+	      implicity	 end  this  element.  For example, the H1
+	      element is ended only by the </H1> tag, but the  LI
+	      element  is  ended  by  any one of the <LI>, </LI>,
+	      </OL>, or </UL> tags.
+
+SEE ALSO
+       Element_Node(3).
+
+AUTHOR
+       Paul J. Lucas <pjl@best.com>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HTML Tree		 October 12, 1999			1
+
+

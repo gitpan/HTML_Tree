@@ -1,0 +1,130 @@
+.\"
+.\"	HTML Tree
+.\"	Element_Node.3
+.\"
+.\"	Copyright (C) 1999  Paul J. Lucas
+.\"
+.\"	This program is free software; you can redistribute it and/or modify
+.\"	it under the terms of the GNU General Public License as published by
+.\"	the Free Software Foundation; either version 2 of the License, or
+.\"	(at your option) any later version.
+.\" 
+.\"	This program is distributed in the hope that it will be useful,
+.\"	but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"	GNU General Public License for more details.
+.\" 
+.\"	You should have received a copy of the GNU General Public License
+.\"	along with this program; if not, write to the Free Software
+.\"	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.\" ---------------------------------------------------------------------------
+.\" define code-start macro
+.de cS
+.sp
+.nf
+.RS 5
+.ft CW
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i 4i 4.5i 5i 5.5i
+..
+.\" define code-end macro
+.de cE
+.ft 1
+.RE
+.fi
+.sp
+..
+.\" ---------------------------------------------------------------------------
+.tr ^
+.TH \f3Element_Node\f1 3 "March 19, 2000" "HTML Tree"
+.SH NAME
+\f(CWElement_Node\fP \- Node in an HTML tree for HTML elements
+.SH SYNOPSIS
+.ft CW
+.nf
+class element;
+
+class Element_Node : public virtual HTML_Node {
+public:
+	typedef std::map< std::string, std::string > attribute_map;
+
+	Element_Node(
+		char const *name, element const&, Parent_Node* = 0
+	);
+	Element_Node(
+		char const *name, element const &elt,
+		char const *att_begin, char const *att_end,
+		Parent_Node* = 0
+	);
+	virtual ~Element_Node();
+
+	attribute_map	attributes;
+
+	char^^^const*	name() const;
+
+	// inherited
+	Parent_Node*	parent() const;
+	void			parent( Parent_Node *new_parent );
+	virtual void	visit( visitor const&, int depth = 0 );
+};
+.fi
+.ft 1
+.SH DESCRIPTION
+\f(CWElement_Node\fP is-an \f(CWHTML_Node\fP
+for HTML element, e.g.:
+\f(CWHEAD\f1, \f(CWTITLE\f1, \f(CWIMG\f1, \f(CWSELECT\f1, etc.
+.SS "Public Interface"
+.IP "\f3Constructors\f1"
+Construct an \f(CWElement_Node\fP.
+The arguments are:
+.RS 10
+.TP 10
+\f(CWname\f1
+The name of the HTML element.
+It
+.B must
+be specified in lower case.
+.TP
+\f(CWatt_begin\f1, \f(CWatt_end\f1
+Pointers to the beginning character and one past the end
+(in STL iterator style)
+whence to parse the attributes from, e.g.:
+.cS
+	<IMG SRC="foo.gif" HEIGHT=30 WIDTH=200>
+	    |                                 |
+	    \f2begin\fP                             \f2end\fP
+.cE
+.TP
+\f(CWelt\f1
+A reference to the \f(CWelement\f1 that this node is being made for.
+.TP
+\f(CWparent\f1
+The parent node to make this node a child of, if any.
+.RE
+.IP "\f3Destructor\f1"
+There is nothing noteworthy about it.
+.IP "\f(CWattribute_map attributes\fP"
+Contains key/value pairs of attribute names and their values.
+Attribute names are in lower case
+(regardless of how they are in the HTML file).
+Boolean attributes have their name as their value
+(per the HTML 4.0 specification).
+.IP "\f(CWchar const* name() const\fP"
+Returns the name of the HTML element, e.g., \f(CWtitle\f1.
+Names are returned in lower case
+(regardless of how they are in the HTML file).
+.SH SEE ALSO
+.BR HTML_Node (3),
+.BR Parent_Node (3).
+.PP
+Dave Raggett, Arnaud Le Hors, and Ian Jacobs.
+``On SGML and HTML: SGML constructs used in HTML: Attributes,''
+.I HTML 4.0 Specification, section 3.2.2,
+World Wide Web Consortium,
+April 1998.
+.RS
+\f(CWhttp://www.w3.org/TR/PR-html40/intro/sgmltut.html#h-3.2.2\f1
+.RE
+.SH AUTHOR
+Paul J. Lucas
+.RI < pjl@best.com >

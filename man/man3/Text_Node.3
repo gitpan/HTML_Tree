@@ -1,0 +1,78 @@
+.\"
+.\"	HTML Tree
+.\"	Text_Node.3
+.\"
+.\"	Copyright (C) 1999  Paul J. Lucas
+.\"
+.\"	This program is free software; you can redistribute it and/or modify
+.\"	it under the terms of the GNU General Public License as published by
+.\"	the Free Software Foundation; either version 2 of the License, or
+.\"	(at your option) any later version.
+.\" 
+.\"	This program is distributed in the hope that it will be useful,
+.\"	but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"	GNU General Public License for more details.
+.\" 
+.\"	You should have received a copy of the GNU General Public License
+.\"	along with this program; if not, write to the Free Software
+.\"	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.\" ---------------------------------------------------------------------------
+.\" define code-start macro
+.de cS
+.sp
+.nf
+.RS 5
+.ft CW
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i 4i 4.5i 5i 5.5i
+..
+.\" define code-end macro
+.de cE
+.ft 1
+.RE
+.fi
+.sp
+..
+.\" ---------------------------------------------------------------------------
+.TH \f3Text_Node\f1 3 "March 19, 2000" "HTML Tree"
+.SH NAME
+\f(CWText_Node\fP \- Node in an HTML tree for plain text
+.SH SYNOPSIS
+.ft CW
+.nf
+class Parent_Node;
+
+class Text_Node : public virtual HTML_Node {
+public:
+	Text_Node(
+		char const *begin, char const *end, Parent_Node* = 0
+	);
+
+	std::string	text;
+
+	// inherited
+	Parent_Node*	parent() const;
+	void			parent( Parent_Node *new_parent );
+	virtual void	visit( visitor const&, int depth = 0 );
+};
+.fi
+.ft 1
+.SH DESCRIPTION
+\f(CWText_Node\fP is-an \f(CWHTML_Node\fP that simply contains plain text.
+.SS "Public Interface"
+.IP "\f(CWText_Node( char const *begin, char const *end, Parent_Node *parent = 0 )\fP"
+Constructor.
+It takes pointers to the beginning character and one past the end
+(in STL iterator style)
+and makes that the text.
+If \f(CWparent\f1 is not null,
+sets the parent and adds this node to that parent's list of child nodes.
+.IP "\f(CWtext\fP"
+Contains the text.
+.SH SEE ALSO
+.BR HTML_Node (3),
+.BR Parent_Node (3).
+.SH AUTHOR
+Paul J. Lucas
+.RI < pjl@best.com >

@@ -1,0 +1,66 @@
+
+
+
+Text_Node(3)					     Text_Node(3)
+
+
+NAME
+       Text_Node - Node in an HTML tree for plain text
+
+SYNOPSIS
+       class Parent_Node;
+
+       class Text_Node : public virtual HTML_Node {
+       public:
+	    Text_Node(
+		 char const *begin, char const *end, Parent_Node* = 0
+	    );
+
+	    std::string	   text;
+
+	    // inherited
+	    Parent_Node*   parent() const;
+	    void	   parent( Parent_Node *new_parent );
+	    virtual void   visit( visitor const&, int depth = 0 );
+       };
+
+DESCRIPTION
+       Text_Node is-an HTML_Node that simply contains plain text.
+
+   Public Interface
+       Text_Node( char const *begin, char const *end, Parent_Node
+       *par- ent = 0 )
+	      Constructor.  It takes pointers  to  the	beginning
+	      character	 and  one  past	 the end (in STL iterator
+	      style) and makes that the text.  If parent  is  not
+	      null,  sets  the	parent and adds this node to that
+	      parent's list of child nodes.
+
+       text   Contains the text.
+
+SEE ALSO
+       HTML_Node(3), Parent_Node(3).
+
+AUTHOR
+       Paul J. Lucas <pjl@best.com>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HTML Tree		  March 19, 2000			1
+
+
